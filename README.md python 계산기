@@ -1,0 +1,74 @@
+from tkinter import *
+
+win=Tk()
+win.geometry("400x500")
+win.title("계산기")
+win.option_add("*Font","맑은 고딕 20")
+current=""
+first_num=0
+operator=""
+def click_number(num):
+    global current
+    current+=str(num)
+    display.delete(0,END)
+    display.insert(END,current)
+def click_operator(op):
+    global first_num, operator, current
+    if current!="":
+     first_num=float(current)
+     operator=op
+     current=""
+     display.delete(0,END)
+     def click_equal():
+         global current, first_num, operator
+         if current == "":
+            return
+         second_num = float(current)
+        
+    if operator=="+":
+            result=first_num+second_num
+    elif operator=="-":
+             result=first_num-second_num
+    elif operator=="*":
+             result=first_num*second_num
+    elif operator=="/":
+        if second_num!=0:
+            display.delete(0,END) 
+            display.insert(END,"Error")    
+            current=""
+            return
+        result=first_num/second_num
+        display.delete(0,END)
+        display.insert(END,result)
+        current=str(result)
+def click_clear():
+    global current, first_num, operator
+    current=""
+    first_num=0
+    operator=""
+    display.delete(0,END)
+display=Entry(win, justify=RIGHT),
+display.pack(fill=X, ipady=20, padx=10, pady=10)
+frame=Frame(win)
+frame.pack()
+buttons=[
+ ("7", 1, 0), ("8", 1, 1), ("9", 1, 2), ("/", 1, 3),
+ ("4", 2, 0), ("5", 2, 1), ("6", 2, 2), ("*", 2, 3),
+ ("1", 3, 0), ("2", 3, 1), ("3", 3, 2), ("-", 3, 3),
+ ("0", 4, 0), (".", 4, 1), ("=", 4, 2), ("+", 4, 3),
+]
+for (text, row, col) in buttons:
+    if text.isdigit():
+         btn=Button(frame, text=text, width=5, height=2,
+                    command=lambda t=text: click_number(t))
+    elif text =="C":
+            btn=Button(frame, text=text, width=5, height=2,
+                        command=click_clear)
+    elif text=="=":
+         btn=Button(frame, text=text, width=5, height=2,
+                    command=click_equal)
+    else:
+         btn=Button(frame, text=text, width=5, height=2,
+                    command=lambda t=text: click_operator(t))
+    btn.grid(row=row, column=col, padx=5, pady=5)
+win.mainloop()
